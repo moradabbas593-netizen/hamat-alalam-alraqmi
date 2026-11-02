@@ -1,0 +1,1105 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>حُماة العالم الرقمي</title>
+<script>document.documentElement.dir="rtl";document.documentElement.lang="ar";</script>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;800&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: dark indigo stage like the Cyber Security deck; welcome screen, then a 3-tab app (شرح / لعبة / إنجازاتي) */
+:root{
+  --bg:#181143;          /* deck background */
+  --bg-2:#221a5c;
+  --surface:rgba(255,255,255,.07);
+  --surface-2:rgba(255,255,255,.12);
+  --line:rgba(126,137,252,.35);
+  --fg:#f4f3ff;
+  --muted:#b9b6e6;
+  --violet:#7e89fc;      /* sphere */
+  --cyan:#46c2cf;        /* network lines */
+  --ice:#8fc3e3;         /* padlock */
+  --ink:#10092f;
+  --good:#52e0a4;
+  --bad:#ff7a99;
+  --bronze:#d38e56; --silver:#d5dcee; --gold:#f6c657;
+  --font-display:"Baloo Bhaijaan 2","Cairo",system-ui,sans-serif;
+  --font-body:"Cairo",system-ui,sans-serif;
+  color-scheme:dark;
+  direction:rtl;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  direction:rtl;text-align:right;
+  margin:0;min-height:100vh;
+  font-family:var(--font-body);font-size:17px;line-height:1.75;
+  background:var(--bg);color:var(--fg);
+  background-image:
+    radial-gradient(700px 420px at 100% 0%,rgba(70,194,207,.28),transparent 65%),
+    radial-gradient(600px 500px at 0% 100%,rgba(126,137,252,.28),transparent 65%);
+  background-attachment:fixed;
+  padding-block:20px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.35;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px;border-radius:10px}
+.wrap{max-width:940px;margin-inline:auto}
+
+/* buttons */
+.btn{
+  border:0;border-radius:14px;padding:.7em 1.5em;font-weight:700;font-size:1rem;
+  background:var(--cyan);color:var(--ink);box-shadow:0 6px 0 #2a8d99;
+  transition:transform .12s,box-shadow .12s,filter .12s;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #2a8d99}
+.btn.alt{background:var(--violet);box-shadow:0 6px 0 #4c55c4;color:#fff}
+.btn.alt:active{box-shadow:0 2px 0 #4c55c4}
+.btn.ghost{background:transparent;color:var(--fg);box-shadow:none;border:2px solid var(--line)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+
+/* welcome */
+#welcome{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;min-height:calc(100vh - 80px)}
+.hero-art{order:2;position:relative;aspect-ratio:1;max-width:420px;width:100%;margin-inline:auto}
+.hero-art canvas{width:100%;height:100%;display:block}
+.hero-art .lock{position:absolute;width:38%;left:2%;bottom:2%;filter:drop-shadow(0 14px 22px rgba(0,0,0,.45))}
+.hero-text{display:flex;flex-direction:column;gap:18px}
+.eyebrow{color:var(--cyan);font-weight:700;letter-spacing:.04em;font-size:.95rem}
+.hero-text h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+.hero-text .lead{color:var(--muted);font-size:1.05rem}
+.name-form{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px}
+.name-form label{font-weight:700}
+.name-row{display:flex;gap:10px;flex-wrap:wrap}
+.name-row input{
+  flex:1 1 180px;min-width:0;font:inherit;font-size:1.1rem;padding:.65em 1em;border-radius:14px;
+  border:2px solid var(--line);background:rgba(8,4,36,.55);color:var(--fg);
+}
+.name-row input::placeholder{color:#8c88c6}
+.err{color:var(--bad);font-size:.95rem;min-height:1.4em}
+.credits{color:var(--muted);font-size:.92rem;border-top:1px solid var(--line);padding-top:14px;display:grid;gap:2px}
+.credits b{color:var(--fg)}
+
+/* app header */
+#app{display:none}
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px;flex:1 1 260px;min-width:0}
+.brand svg{width:46px;flex:none}
+.brand h2{font-size:1.5rem;font-weight:800}
+.brand p{color:var(--muted);font-size:.95rem}
+.hud{display:flex;gap:10px;align-items:center}
+.chip{
+  display:flex;align-items:center;gap:8px;padding:.35em 1em;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);font-weight:700;font-variant-numeric:tabular-nums;
+}
+.chip svg{width:20px;height:20px}
+.icon-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;padding:0}
+.icon-btn svg{width:22px;height:22px}
+
+.tabs{display:flex;gap:6px;padding:6px;background:rgba(8,4,36,.5);border:1px solid var(--line);border-radius:18px;margin-bottom:22px}
+.tab{flex:1;border:0;background:transparent;padding:.65em .5em;border-radius:13px;font-weight:700;color:var(--muted);font-size:1rem}
+.tab[aria-selected="true"]{background:var(--violet);color:#fff;box-shadow:0 4px 14px rgba(126,137,252,.45)}
+.panel[hidden]{display:none}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;backdrop-filter:blur(6px)}
+.stack{display:flex;flex-direction:column;gap:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card h3{font-size:1.35rem;margin-bottom:10px;color:var(--cyan)}
+.card .tag{display:inline-block;font-size:.85rem;font-weight:700;color:var(--ink);background:var(--ice);border-radius:8px;padding:0 .6em;margin-bottom:8px}
+.list{margin:0;padding:0 1.2em 0 0;display:grid;gap:6px}
+.pw{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pw code{
+  direction:ltr;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.15rem;font-weight:700;
+  background:rgba(8,4,36,.6);border:1px dashed var(--cyan);border-radius:12px;padding:.25em .8em;color:var(--good);letter-spacing:.06em
+}
+.pw.weak code{color:var(--bad);border-color:var(--bad)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{background:rgba(8,4,36,.45);border-radius:16px;padding:14px}
+.mini h4{margin:0 0 6px;font-family:var(--font-display);font-size:1.1rem}
+.mini.good h4{color:var(--good)} .mini.bad h4{color:var(--bad)}
+.tip{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:rgba(70,194,207,.12);border:1px solid rgba(70,194,207,.4)}
+.tip svg{flex:none;width:26px;margin-top:3px}
+.cta{display:flex;justify-content:center;padding-top:6px}
+
+/* level map */
+.lvl{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:22px 16px}
+.lvl .medal{width:96px;transform:translateZ(40px)}
+.lvl h3{font-size:1.2rem;margin:0;color:var(--fg)}
+.lvl p{color:var(--muted);font-size:.95rem}
+.lvl .state{font-weight:700;font-size:.95rem}
+.lvl.locked{opacity:.6}
+.lvl.locked .medal{filter:grayscale(1) brightness(.7)}
+.lvl.done{border-color:var(--good)}
+.rules{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.95rem}
+.rules span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.1em .9em}
+
+/* play */
+#play{display:none}
+.play-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.play-head h2{font-size:1.35rem}
+.dots{display:flex;gap:8px;align-items:center}
+.dots i{width:14px;height:14px;border-radius:50%;background:var(--surface-2);border:2px solid var(--line)}
+.dots i.cur{border-color:var(--cyan);background:rgba(70,194,207,.3)}
+.dots i.ok{background:var(--good);border-color:var(--good)}
+.dots i.no{background:var(--bad);border-color:var(--bad)}
+.q{font-size:1.3rem;font-weight:700;line-height:1.8;margin-bottom:16px}
+.q-meta{color:var(--muted);font-size:.9rem;margin-bottom:6px}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tf button,.opt{
+  border:2px solid var(--line);background:rgba(8,4,36,.5);border-radius:18px;padding:16px;font-weight:700;font-size:1.15rem;
+  transition:transform .12s,border-color .12s,background .12s;
+}
+.tf button{display:flex;align-items:center;justify-content:center;gap:10px;font-size:1.4rem;padding:20px}
+.tf button svg{width:30px;height:30px}
+.tf button:hover:not([disabled]),.opt:hover:not([disabled]){border-color:var(--cyan);transform:translateY(-2px)}
+.opts{display:grid;gap:12px}
+.opt{display:flex;gap:12px;align-items:center;text-align:right;font-size:1.1rem}
+.opt b{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-family:var(--font-display)}
+.right{border-color:var(--good)!important;background:rgba(82,224,164,.16)!important}
+.wrong{border-color:var(--bad)!important;background:rgba(255,122,153,.16)!important;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(7px)}75%{transform:translateX(-7px)}}
+[disabled]{cursor:default}
+.fb{margin-top:18px;border-radius:18px;padding:16px 18px;display:none;gap:14px;align-items:flex-start;animation:pop .3s}
+.fb.show{display:flex}
+.fb.ok{background:rgba(82,224,164,.14);border:2px solid var(--good)}
+.fb.no{background:rgba(255,122,153,.13);border:2px solid var(--bad)}
+.fb svg{flex:none;width:38px}
+.fb h4{margin:0;font-family:var(--font-display);font-size:1.2rem}
+.fb.ok h4{color:var(--good)} .fb.no h4{color:var(--bad)}
+.fb .pts{margin-inline-start:8px;font-size:.95rem;color:var(--fg);background:var(--surface-2);border-radius:8px;padding:0 .6em}
+.next{margin-top:16px;display:none;justify-content:flex-start}
+.next.show{display:flex}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+
+/* tasks */
+textarea,.pwin{
+  width:100%;font:inherit;font-size:1.05rem;border-radius:14px;border:2px solid var(--line);
+  background:rgba(8,4,36,.55);color:var(--fg);padding:.7em 1em;
+}
+textarea{min-height:110px;resize:vertical}
+.pwin{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.25rem;letter-spacing:.06em}
+.conds{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 14px}
+.cond{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:14px;padding:10px 12px;background:rgba(8,4,36,.5);cursor:pointer;font-weight:600;line-height:1.5}
+.cond input{width:20px;height:20px;accent-color:var(--cyan);flex:none}
+.cond.on{border-color:var(--cyan);background:rgba(70,194,207,.14)}
+.cond.right input{accent-color:var(--good)}
+.checks{display:grid;gap:8px;margin:14px 0}
+.checks li{list-style:none;display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;background:rgba(8,4,36,.45)}
+.checks li i{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;background:var(--surface-2);color:var(--muted)}
+.checks li.ok i{background:var(--good);color:var(--ink)}
+.checks li.ok{color:var(--good)}
+.meter{height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:10px}
+.meter span{display:block;height:100%;width:0;border-radius:99px;background:var(--bad);transition:width .25s,background .25s}
+.warn{color:var(--gold);font-size:.95rem;margin-top:8px}
+.reveal{margin-top:14px}
+.answer{display:none;margin-top:10px;padding:12px 14px;border-radius:14px;background:rgba(246,198,87,.13);border:1px solid var(--gold)}
+.answer.show{display:block}
+
+/* result */
+.result{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 20px}
+.result .medal{width:150px;animation:pop .5s}
+.result h2{font-size:2rem}
+.result .big{font-family:var(--font-display);font-size:2.6rem;font-weight:800;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+/* achievements */
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bd{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.bd .medal{width:84px}
+.bd.lock .medal{filter:grayscale(1) brightness(.6)}
+.bd p{color:var(--muted);font-size:.9rem}
+.progress{height:16px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--cyan));border-radius:99px;transition:width .5s}
+.cert{
+  text-align:center;padding:34px 20px;border-radius:24px;border:3px solid var(--gold);
+  background:linear-gradient(160deg,rgba(246,198,87,.16),rgba(126,137,252,.18));
+  display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;
+  outline:1px solid rgba(246,198,87,.5);outline-offset:-12px;
+}
+.cert .medal{width:96px}
+.cert h2{font-size:2rem;color:var(--gold)}
+.cert .nm{font-family:var(--font-display);font-size:2.4rem;font-weight:800}
+.cert small{color:var(--muted)}
+.locked-note{color:var(--muted);text-align:center;padding:22px}
+.linkish{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.95rem;padding:6px}
+
+
+/* ---- 3D & motion ---- */
+.orbs{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-1}
+.orbs i{position:absolute;border-radius:50%;filter:blur(3px);opacity:.28;animation:floaty 9s ease-in-out infinite}
+.orbs i:nth-child(1){width:90px;height:90px;left:8%;top:18%;background:radial-gradient(circle at 30% 30%,#b7bdff,#7e89fc 60%,transparent 70%)}
+.orbs i:nth-child(2){width:60px;height:60px;right:10%;top:55%;background:radial-gradient(circle at 30% 30%,#9ff0f7,#46c2cf 60%,transparent 70%);animation-delay:-3s}
+.orbs i:nth-child(3){width:120px;height:120px;left:40%;bottom:6%;background:radial-gradient(circle at 30% 30%,#b7bdff,#4a43b8 60%,transparent 70%);animation-delay:-6s;opacity:.35}
+@keyframes floaty{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(14px,-34px,0)}}
+.hero-art.three canvas#sphere,.hero-art.three .lock{display:none}
+.hero-art canvas.gl{position:absolute;inset:0;width:100%;height:100%}
+.medal{filter:drop-shadow(0 10px 16px rgba(0,0,0,.45));overflow:visible}
+.shine{animation:shine 3.6s ease-in-out infinite}
+@keyframes shine{0%{transform:translateX(0)}55%,100%{transform:translateX(170px)}}
+.grid3{perspective:1100px}
+.lvl{transform-style:preserve-3d;transition:transform .18s ease-out,box-shadow .2s;will-change:transform;animation:rise .6s both}
+.lvl:nth-child(2){animation-delay:.1s}.lvl:nth-child(3){animation-delay:.2s}
+.lvl:not(.locked):hover{box-shadow:0 24px 40px -12px rgba(70,194,207,.45)}
+.lvl h3,.lvl .btn,.lvl .state{transform:translateZ(22px)}
+@keyframes rise{from{opacity:0;transform:perspective(900px) rotateX(-28deg) translateY(30px)}to{opacity:1;transform:none}}
+.panel:not([hidden]){animation:panelIn .45s both}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.panel:not([hidden]) > .card,.panel:not([hidden]) > .tip{animation:flipIn .6s both}
+.panel:not([hidden]) > :nth-child(2){animation-delay:.06s}.panel:not([hidden]) > :nth-child(3){animation-delay:.12s}
+.panel:not([hidden]) > :nth-child(4){animation-delay:.18s}.panel:not([hidden]) > :nth-child(5){animation-delay:.24s}
+.panel:not([hidden]) > :nth-child(6){animation-delay:.3s}
+@keyframes flipIn{from{opacity:0;transform:perspective(900px) rotateX(-18deg) translateY(24px)}to{opacity:1;transform:none}}
+#play .card{animation:flipIn .55s both;transform-origin:50% 0}
+.opt{animation:slideIn .45s both}.opt:nth-child(2){animation-delay:.06s}.opt:nth-child(3){animation-delay:.12s}.opt:nth-child(4){animation-delay:.18s}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px) rotateY(20deg)}to{opacity:1;transform:none}}
+.tf button{box-shadow:0 7px 0 rgba(0,0,0,.35)}
+.tf button:active:not([disabled]){transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.tf .yes{border-color:rgba(82,224,164,.6)}.tf .no{border-color:rgba(255,122,153,.6)}
+.right{animation:win .55s}
+@keyframes win{0%{transform:scale(1)}40%{transform:scale(1.06) rotateX(10deg)}100%{transform:scale(1)}}
+.brand svg{animation:spinY 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+@keyframes spinY{0%,60%,100%{transform:perspective(300px) rotateY(0)}80%{transform:perspective(300px) rotateY(180deg)}}
+.chip.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.25) translateY(-4px);box-shadow:0 0 22px rgba(246,198,87,.7)}}
+.result .medal{animation:spinIn 1.2s cubic-bezier(.2,.8,.2,1) both,glow 2.4s 1.2s ease-in-out infinite;transform-style:preserve-3d}
+@keyframes spinIn{from{transform:perspective(600px) rotateY(900deg) scale(.2);opacity:0}to{transform:perspective(600px) rotateY(0) scale(1);opacity:1}}
+@keyframes glow{50%{filter:drop-shadow(0 0 26px rgba(246,198,87,.75))}}
+.cert{perspective:1000px}
+.cert .medal{animation:tilt 5s ease-in-out infinite}
+@keyframes tilt{0%,100%{transform:perspective(500px) rotateY(-18deg)}50%{transform:perspective(500px) rotateY(18deg)}}
+.pw code{transition:transform .2s}.pw code:hover{transform:translateY(-4px) rotateX(18deg)}
+.sortlist{display:grid;gap:10px}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:rgba(8,4,36,.5)}
+.srow code{direction:ltr;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.2rem;font-weight:700;letter-spacing:.06em}
+.sbtns{display:flex;gap:8px}
+.sb{border:2px solid var(--line);background:transparent;border-radius:12px;padding:.25em 1em;font-weight:700}
+.sb.on{background:var(--violet);border-color:var(--violet);color:#fff}
+.sb.key{border-color:var(--good);box-shadow:0 0 0 2px rgba(82,224,164,.35)}
+.dl{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px}
+.dlmsg{color:var(--muted);font-size:.95rem;text-align:center}
+.certimg{max-width:100%;border-radius:14px;border:2px solid var(--gold)}
+
+.lb{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.lb li{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(8,4,36,.45);border:2px solid transparent}
+.lb li.me{border-color:var(--cyan)}
+.lb .rk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:800;background:var(--surface-2);flex:none}
+.lb li:nth-child(1) .rk{background:var(--gold);color:var(--ink)}.lb li:nth-child(2) .rk{background:var(--silver);color:var(--ink)}.lb li:nth-child(3) .rk{background:var(--bronze);color:var(--ink)}
+.lb .nm{flex:1;min-width:0;font-weight:700}.lb .nm small{display:block;color:var(--muted);font-weight:400;font-size:.85rem}
+.lb .sc{font-weight:800;font-variant-numeric:tabular-nums}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+
+@media(max-width:720px){
+  body{font-size:16px}
+  #welcome{grid-template-columns:1fr;min-height:0;gap:10px}
+  .hero-art{max-width:260px;order:-1}
+  .grid2,.grid3,.badges,.split,.conds{grid-template-columns:1fr}
+  .badges{grid-template-columns:repeat(3,1fr);gap:8px}
+  .bd .medal{width:60px}
+  .tf button{font-size:1.15rem;padding:16px 8px}
+  .tab{font-size:.95rem}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+<!-- ============ WELCOME ============ -->
+<section id="welcome" aria-label="شاشة الترحيب">
+  <div class="hero-art" aria-hidden="true">
+    <canvas id="sphere" width="640" height="640"></canvas>
+    <svg class="lock" viewBox="0 0 120 140"><use href="#padlock"/></svg>
+  </div>
+  <div class="hero-text">
+    <span class="eyebrow">تكنولوجيا المعلومات والاتصالات · الصف الرابع الابتدائي</span>
+    <h1>حُماة العالم الرقمي</h1>
+    <p class="lead">المدينة الرقمية تتعرض لهجوم الفيروسات والقراصنة! انضم إلى «أكاديمية الحراس الرقميين» واجمع ثلاثة مفاتيح أمان وشارات التميز، لتحمي الأجهزة والبيانات وتصبح حارساً رقمياً معتمداً.</p>
+    <form class="name-form" id="nameForm" autocomplete="off">
+      <label for="nameIn">اكتب اسمك واسم فريقك لتبدأ</label>
+      <div class="name-row"><input id="teamIn" maxlength="20" placeholder="اسم فريقك (اختياري)"></div>
+      <div class="name-row">
+        <input id="nameIn" maxlength="24" placeholder="اسمك هنا" required>
+        <button class="btn" type="submit">ابدأ الرحلة</button>
+      </div>
+      <div class="err" id="nameErr" role="alert"></div>
+    </form>
+    <div class="credits">
+      <span>إعداد: <b>مراد عباس مراد</b></span>
+      <span>تحت إشراف: <b>د/ زينب أحمد</b> · <b>م.م/ مها محمود</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<main id="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 120 140" aria-hidden="true"><use href="#padlock"/></svg>
+      <div>
+        <h2 id="hello">أهلاً يا بطل</h2>
+        <p id="sub">أكاديمية الحراس الرقميين</p>
+      </div>
+    </div>
+    <div class="hud">
+      <div class="chip" title="مفاتيح الأمان"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v4M15 12v3"/></svg><span id="keys">0</span><span style="color:var(--muted)">/ 3</span></div>
+      <div class="chip" title="مجموع النقاط">
+        <svg viewBox="0 0 24 24" fill="var(--gold)" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+        <span id="pts">0</span><span style="color:var(--muted)">/ 170</span>
+      </div>
+      <button class="icon-btn" id="soundBtn" aria-label="تشغيل أو إيقاف الصوت" aria-pressed="true"></button>
+    </div>
+  </header>
+
+  <section id="brief" class="stack" hidden>
+    <div class="card"><span class="tag">القصة</span><h3>المدينة الرقمية في خطر!</h3>
+      <p>الفيروسات والقراصنة يهاجمون المدينة الرقمية! أنت الآن طالب في <b>أكاديمية الحراس الرقميين</b>، ومهمتك أن تجمع <b>3 مفاتيح أمان</b> لتحمي الأجهزة والبيانات.</p></div>
+    <div class="card"><span class="tag">القواعد</span><h3>كيف تلعب؟</h3>
+      <ul class="list"><li>لكل إجابة صحيحة <b>10 نقاط</b>، ولكل تطبيق عملي ناجح حتى <b>20 نقطة</b>.</li>
+      <li>ثلاثة مستويات: المبتدئ الرقمي، ثم صائد الفيروسات، ثم الحارس الرقمي المعتمد.</li>
+      <li>للانتقال للمستوى التالي اجمع <b>50 نقطة</b> واجتز التحدي الرئيسي.</li>
+      <li>تحصل على <b>شارة</b> عندما تأخذ العلامة الكاملة في نشاط تطبيقي.</li></ul></div>
+    <div class="card"><span class="tag">المنافسة</span><h3>فريقك أقوى بالتعاون</h3>
+      <p>تُجمع نقاطك مع نقاط أعضاء فريقك في <b>لوحة المتصدرين</b>. ساعدوا بعضكم في تصحيح الأخطاء، والفريق الفائز يُكرَّم. وفي النهاية تنال <b>لقباً</b> و<b>شهادة تقدير</b>.</p></div>
+    <div class="cta"><button class="btn" id="startMission">ابدأ المهمة</button></div>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-learn" aria-controls="p-learn" aria-selected="true">الشرح</button>
+    <button class="tab" role="tab" id="t-game" aria-controls="p-game" aria-selected="false">اللعبة</button>
+    <button class="tab" role="tab" id="t-me" aria-controls="p-me" aria-selected="false">إنجازاتي</button>
+    <button class="tab" role="tab" id="t-board" aria-controls="p-board" aria-selected="false">المتصدرون</button>
+  </div>
+
+  <!-- ---- الشرح ---- -->
+  <section class="panel stack" id="p-learn" role="tabpanel" aria-labelledby="t-learn">
+    <div class="card">
+      <span class="tag">أولاً</span>
+      <h3>الأمان الرقمي</h3>
+      <p>عند إنشاء كلمة مرور لحساباتك على شبكة الإنترنت أو لأجهزتك (الكمبيوتر الشخصي أو الهاتف المحمول)، يجب أن تنشئ <b>كلمة مرور قوية</b> يصعب تخمينها، لحماية أجهزتك من <b>القرصنة</b> أو <b>الاختراق</b>.</p>
+    </div>
+
+    <div class="card">
+      <h3>كيف تكون كلمة المرور قوية؟</h3>
+      <p>غالباً تتكون كلمة المرور القوية من <b>8 أحرف على الأقل</b>، وتحتوي على <b>حروف وأرقام ورموز خاصة</b>.</p>
+      <p style="margin-top:12px">أمثلة على كلمات المرور القوية:</p>
+      <div class="pw"><code>Mo5&amp;re2i</code><code>Abg65@iu</code><code>9045#@Ta</code></div>
+      <div class="split" style="margin-top:16px">
+        <div class="mini good">
+          <h4>قوية</h4>
+          <p>طويلة، فيها حروف وأرقام ورموز، ويصعب تخمينها.</p>
+          <div class="pw"><code>7VLI@VM</code></div>
+        </div>
+        <div class="mini bad">
+          <h4>ضعيفة</h4>
+          <p>قصيرة وسهلة، بلا رموز، أو من معلوماتك الشخصية.</p>
+          <div class="pw weak"><code>abc123</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>لا تستخدم معلوماتك الشخصية</h3>
+        <p>لا تستخدم اسمك أو تاريخ ميلادك أو عنوانك عند إنشاء كلمة المرور، لأن الآخرين قد يخمنونها بسهولة.</p>
+      </div>
+      <div class="card">
+        <h3>كلمة مرور مختلفة لكل حساب</h3>
+        <p>لا تستخدم نفس كلمة المرور لكل حساباتك. ويمكنك الاستعانة ببرنامج لإدارة كلمات المرور، فهو يساعدك على إنشائها وحفظها بشكل آمن.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag">ثانياً</span>
+      <h3>اختر برنامجاً مضاداً للفيروسات</h3>
+      <p>تستخدم برامج مكافحة الفيروسات <b>للكشف عن الفيروسات والبرامج الضارة</b>، وقد تقوم أيضاً <b>بإصلاح الملفات</b> التي أتلفتها الفيروسات.</p>
+      <ul class="list" style="margin-top:10px">
+        <li>استخدم كلمات مرور قوية ومختلفة لكل حساب وجهاز.</li>
+        <li>ثبّت برنامج حماية من الفيروسات على كل أجهزتك.</li>
+        <li>تذكر أن هناك برامج تقدم لك نصائح لمساعدتك في إنشاء كلمات مرور آمنة.</li>
+      </ul>
+    </div>
+
+    <div class="tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg>
+      <p><b>التطبيق العملي:</b> اقترح كلمات مرور قوية لحسابك أو لأجهزتك. ستجرب ذلك في المستوى الثالث، بكلمة مرور تدريبية وليست كلمة مرورك الحقيقية.</p>
+    </div>
+
+    <div class="cta"><button class="btn" data-go="game">فهمت الدرس، ابدأ اللعب</button></div>
+  </section>
+
+  <!-- ---- اللعبة ---- -->
+  <section class="panel" id="p-game" role="tabpanel" aria-labelledby="t-game" hidden>
+    <div id="map" class="stack">
+      <div class="card">
+        <h3>أكاديمية الحراس الرقميين</h3>
+        <p>الفيروسات والقراصنة يهاجمون المدينة الرقمية! أنجز المستويات الثلاثة لتجمع <b>مفاتيح الأمان</b>. للانتقال إلى المستوى التالي اجمع <b>50 نقطة</b> على الأقل واجتز التحدي الرئيسي. إن لم تنجح، حاول مرة أخرى.</p>
+        <div class="rules" style="margin-top:12px"><span>إجابة صحيحة: 10 نقاط</span><span>تطبيق عملي: حتى 20 نقطة</span><span>شارة تميز: علامة كاملة في نشاط تطبيقي</span></div>
+      </div>
+      <div class="grid3" id="levels"></div>
+    </div>
+    <div id="play"></div>
+  </section>
+
+  <!-- ---- إنجازاتي ---- -->
+  <section class="panel stack" id="p-me" role="tabpanel" aria-labelledby="t-me" hidden>
+    <div class="card stack" style="gap:12px">
+      <h3 style="margin:0">تقدمك</h3>
+      <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+      <p id="progTxt"></p>
+    </div>
+    <div class="card"><h3>مفاتيح الأمان (المستويات)</h3><div class="badges" id="badges"></div></div>
+    <div class="card"><h3>شارات التميز</h3><div class="badges" id="badges2"></div></div>
+    <div class="card" style="text-align:center"><small style="color:var(--muted)">لقبك الحالي</small><div id="titleTxt" style="font-family:var(--font-display);font-size:1.8rem;font-weight:800;color:var(--gold)"></div></div>
+    <div id="certBox"></div>
+    <div class="cta"><button class="linkish" id="resetBtn">البدء من جديد بلاعب آخر</button></div>
+  </section>
+<section class="panel stack" id="p-board" role="tabpanel" aria-labelledby="t-board" hidden>
+    <div class="card"><h3>ترتيب الفرق</h3><ol class="lb" id="lbTeams"></ol></div>
+    <div class="card"><h3>الحراس الأبطال</h3><ol class="lb" id="lbPlayers"></ol></div>
+    <div class="cta"><button class="linkish" id="clearBoard">مسح لوحة المتصدرين</button></div>
+  </section>
+</main>
+</div>
+
+<!-- shared SVG symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lkBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a9dbf2"/><stop offset="1" stop-color="#5a8fb8"/></linearGradient>
+    <linearGradient id="lkMetal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e3e8f2"/><stop offset=".5" stop-color="#8d98ae"/><stop offset="1" stop-color="#d3d9e6"/></linearGradient>
+    <symbol id="padlock" viewBox="0 0 120 140">
+      <path d="M32 62V42a28 28 0 0156 0v20" fill="none" stroke="url(#lkMetal)" stroke-width="12" stroke-linecap="round"/>
+      <rect x="8" y="58" width="104" height="76" rx="20" fill="url(#lkBody)"/>
+      <rect x="8" y="58" width="104" height="76" rx="20" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="3"/>
+      <circle cx="60" cy="88" r="10" fill="#14306a"/><rect x="55.5" y="92" width="9" height="20" rx="4" fill="#14306a"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const store = {
+  get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+/* ---------- state ---------- */
+const MAXPTS = 170, PASS1 = 50, PASS2 = 50, PASS3 = 30;
+let S = Object.assign({ name:'', team:'', scores:{1:null,2:null,3:null}, done:{}, badges:{}, sound:true }, store.get('hamat-v2') || {});
+const save = () => store.set('hamat-v2', S);
+const total = () => [1,2,3].reduce((a,k)=>a+(S.scores[k]||0),0);
+
+/* ---------- content (from the gamification document) ---------- */
+const GOOD = ["أحسنت!","رائع!","ممتاز يا بطل!","إجابة صحيحة!","عمل مذهل!"];
+const BAD  = ["قريب جداً!","لا بأس، نتعلم معاً.","حاول تذكّر هذه الفكرة.","خطأ بسيط، تعلّم منه."];
+
+const LEVELS = [
+  { id:1, medal:'bronze', name:'المبتدئ الرقمي', sub:'صح وخطأ + تحدي فك الشفرة', need:'50 نقطة واجتياز تحدي فك الشفرة', max:70, per:10, type:'tf', items:[
+    { q:'من المهم أن تمتلك كلمة مرور قوية لحماية حساباتك الإلكترونية.', a:true,  why:'كلمة المرور القوية تحمي حساباتك وأجهزتك من القرصنة أو الاختراق.' },
+    { q:'تُعد كلمة المرور abc123 من كلمات المرور القوية.', a:false, why:'abc123 قصيرة وسهلة التخمين وليس فيها رموز خاصة، لذلك هي كلمة مرور ضعيفة.' },
+    { q:'تتكون كلمة المرور القوية غالباً من 8 أحرف على الأقل، وتحتوي على حروف وأرقام ورموز خاصة.', a:true, why:'هذه هي خصائص كلمة المرور القوية كما تعلمنا في الدرس.' },
+    { q:'يفضل استخدام نفس كلمة المرور لجميع الحسابات.', a:false, why:'لو عرف أحدهم كلمة المرور الواحدة فسيدخل كل حساباتك. استخدم كلمة مرور مختلفة لكل حساب.' },
+    { q:'تساعد برامج مكافحة الفيروسات على الكشف عن الفيروسات والبرامج الضارة.', a:true, why:'هذه وظيفة برنامج مكافحة الفيروسات الأساسية.' },
+    { q:'يمكن أن تساعد برامج مكافحة الفيروسات في إصلاح الملفات التي أتلفتها الفيروسات.', a:true, why:'بعض برامج مكافحة الفيروسات تستطيع إصلاح الملفات التالفة.' },
+    { q:'تُعد الفيروسات من البرمجيات المفيدة لجهاز الكمبيوتر.', a:false, why:'الفيروسات برامج ضارة تتلف الملفات وتبطئ الجهاز، وليست مفيدة أبداً.' },
+    { q:'تُعد الرسائل الإلكترونية من أشكال الفيروسات التي يمكن إرسالها إلى جهازك.', a:true, why:'قد تحمل رسالة إلكترونية مرفقاً أو رابطاً ضاراً، فلا تفتح رسالة من شخص لا تعرفه.' },
+    { q:'يمكنني استخدام تاريخ ميلادي ككلمة مرور لأنني أتذكره بسهولة.', a:false, why:'تاريخ الميلاد معلومة شخصية يسهل تخمينها، لذلك لا نستخدمه ككلمة مرور.' },
+    { q:'يستخدم برنامج مكافحة الفيروسات في حماية ملفاتك على جهاز الكمبيوتر من التلف.', a:true, why:'يحمي الملفات من التلف الذي تسببه الفيروسات.' }
+  ]},
+  { id:2, medal:'silver', name:'صائد الفيروسات', sub:'تحدي جدار الحماية', need:'50 نقطة على الأقل', max:60, per:10, type:'mc', items:[
+    { q:'يمكنك حماية حساباتك الشخصية على شبكة الإنترنت عن طريق إنشاء:', o:['بياناتك الشخصية','عنوانك','تاريخ ميلادك','كلمة مرور قوية'], a:3, why:'كلمة المرور القوية هي خط الدفاع الأول عن حساباتك.' },
+    { q:'أي مما يلي يُعد من خصائص كلمة المرور القوية؟', o:['أن تكون اسم المستخدم','أن تحتوي على حروف وأرقام ورموز','أن تكون تاريخ الميلاد','أن تكون قصيرة وسهلة التخمين'], a:1, why:'تجمع كلمة المرور القوية بين الحروف والأرقام والرموز الخاصة.' },
+    { q:'ما وظيفة برنامج مكافحة الفيروسات؟', o:['حذف جميع الصور','زيادة سطوع الشاشة','الكشف عن الفيروسات والبرامج الضارة','مشاركة كلمة المرور'], a:2, why:'يكشف الفيروسات والبرامج الضارة، وقد يصلح الملفات التي أتلفتها.' },
+    { q:'لماذا يُنصح باستخدام كلمة مرور مختلفة لكل حساب؟', o:['لتقليل تكرار كلمة المرور بين الحسابات','لتسهيل تخمينها','لاستخدام الاسم في كل الحسابات','لإلغاء حماية الحساب'], a:0, why:'إذا اختلفت كلمات المرور، فاختراق حساب واحد لا يفتح باقي الحسابات.' },
+    { q:'ما الذي يمكّن شخصاً من الدخول إلى جهاز الكمبيوتر عن طريق الإنترنت دون إذن؟', o:['الفضول','المشاركة','التنمر','القرصنة'], a:3, why:'القرصنة (الاختراق) تمكّن شخصاً من دخول جهازك دون إذنك، وكلمة المرور القوية تمنعه.' },
+    { q:'أي كلمة مرور من التالية تُعد قوية؟', o:['abc123','Mo5&re2i','12345678','mohamed2015'], a:1, why:'Mo5&re2i فيها 8 أحرف، وحروف وأرقام ورموز، وليست من معلوماتك الشخصية.' },
+    { q:'ما فائدة برنامج إدارة كلمات المرور؟', o:['يرسل كلماتك إلى أصدقائك','يساعدك على إنشاء كلماتك وحفظها بشكل آمن','يحذف الملفات القديمة','يجعل الجهاز أسرع'], a:1, why:'يساعدك على إنشاء كلمات مرور قوية وحفظها بأمان، فلا تحتاج لتذكرها كلها.' },
+    { q:'أين يجب أن تثبّت برنامج الحماية من الفيروسات؟', o:['على كل أجهزتك','على جهاز واحد فقط','لا حاجة لتثبيته','على الألعاب فقط'], a:0, why:'ثبّت برنامج الحماية على كل أجهزتك لتكون كلها محمية.' }
+  ]},
+  { id:3, medal:'gold', name:'الحارس الرقمي المعتمد', sub:'التطبيق العملي', need:'30 نقطة على الأقل', max:40, per:0, type:'task' }
+];
+const medalColor = { bronze:['#f0b07a','#a8622f'], silver:['#f2f5fb','#98a3bd'], gold:['#ffe28f','#d19a22'] };
+
+const SHIELD = 'M50 4L90 17V58C90 85 73 103 50 116C27 103 10 85 10 58V17Z';
+const SHIELD_IN = 'M50 12L82 22.5V58C82 80 68 95 50 106C32 95 18 80 18 58V22.5Z';
+const medalSVG = (kind) => {
+  const [a,b] = medalColor[kind], id = 'g'+kind+Math.random().toString(36).slice(2,7);
+  return `<svg class="medal" viewBox="0 0 100 120" aria-hidden="true">
+    <defs>
+      <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>
+      <linearGradient id="${id}i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a31a8"/><stop offset="1" stop-color="#14103f"/></linearGradient>
+      <clipPath id="${id}c"><path d="${SHIELD}"/></clipPath>
+    </defs>
+    <path d="${SHIELD}" fill="url(#${id})"/>
+    <path d="${SHIELD_IN}" fill="url(#${id}i)"/>
+    <path d="${SHIELD_IN}" fill="none" stroke="${a}" stroke-opacity=".7" stroke-width="1.6"/>
+    <g transform="translate(50 58)">
+      <path d="M-9 -4V-10a9 9 0 0118 0V-4" fill="none" stroke="url(#${id})" stroke-width="4.5" stroke-linecap="round"/>
+      <rect x="-15" y="-4" width="30" height="24" rx="6" fill="url(#${id})"/>
+      <circle cx="0" cy="6.5" r="3.4" fill="#14103f"/><rect x="-1.4" y="8" width="2.8" height="7" rx="1.4" fill="#14103f"/>
+    </g>
+    <path d="M50 26l2.6 5.3 5.8.8-4.2 4.1 1 5.8L50 39.2l-5.2 2.8 1-5.8-4.2-4.1 5.8-.8z" fill="${a}"/>
+    <g clip-path="url(#${id}c)"><g class="shine"><rect x="-30" y="-10" width="16" height="150" fill="#fff" opacity=".35" transform="skewX(-18)"/></g></g>
+  </svg>`;
+};
+const IC = {
+  yes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>',
+  no:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>',
+  on:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>',
+  off:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>'
+};
+
+const BCOL = { wall:['#8fe3ee','#2a8d99'], virus:['#ff9fb6','#c44469'], pass:['#b7bdff','#4c55c4'] };
+const BICON = {
+  wall:'<rect x="-22" y="-20" width="20" height="11" rx="2"/><rect x="2" y="-20" width="20" height="11" rx="2"/><rect x="-12" y="-5" width="24" height="11" rx="2"/><rect x="-22" y="10" width="20" height="11" rx="2"/><rect x="2" y="10" width="20" height="11" rx="2"/>',
+  virus:'<circle r="11"/><path d="M0-20V-13M0 13V20M-20 0H-13M13 0H20M-14-14l5 5M14 14l-5-5M14-14l-5 5M-14 14l5-5" stroke="#fff" stroke-width="4.5" stroke-linecap="round" fill="none"/><circle cx="-4" cy="-2" r="2.4" fill="#14103f"/><circle cx="4" cy="-2" r="2.4" fill="#14103f"/>',
+  pass:'<circle cx="-12" r="10"/><circle cx="-12" r="4" fill="#14103f"/><rect x="-3" y="-3.5" width="28" height="7" rx="3"/><rect x="13" y="2" width="5" height="10" rx="2"/><rect x="21" y="2" width="5" height="7" rx="2"/>'
+};
+const badgeSVG = k => { const [a,b] = BCOL[k], id = 'b'+k+Math.random().toString(36).slice(2,6);
+  return `<svg class="medal" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#${id})"/><circle cx="50" cy="50" r="37" fill="#14103f" opacity=".6"/><g transform="translate(50 50)" fill="#fff">${BICON[k]}</g></svg>`; };
+
+/* ---------- sound (synthesised, no files) ---------- */
+let AC = null;
+function ctx(){ if(!AC){ try { AC = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } if(AC && AC.state==='suspended') AC.resume(); return AC; }
+function tone(f, t, d, type='sine', v=.22, f2){
+  const c = ctx(); if(!c) return;
+  const o = c.createOscillator(), g = c.createGain(), s = c.currentTime + t;
+  o.type = type; o.frequency.setValueAtTime(f, s);
+  if (f2) o.frequency.exponentialRampToValueAtTime(f2, s + d);
+  g.gain.setValueAtTime(0.0001, s); g.gain.exponentialRampToValueAtTime(v, s + .02);
+  g.gain.exponentialRampToValueAtTime(0.0001, s + d);
+  o.connect(g).connect(c.destination); o.start(s); o.stop(s + d + .05);
+}
+const SFX = {
+  right(){ [523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,i*.09,.28,'triangle',.24)); },
+  wrong(){ tone(220,0,.35,'sawtooth',.16,140); tone(164,.18,.4,'square',.1,98); },
+  click(){ tone(660,0,.07,'sine',.12); },
+  win(){ [523.25,659.25,783.99,1046.5,783.99,1046.5,1318.5].forEach((f,i)=>tone(f,i*.12,.35,'triangle',.24)); },
+  fail(){ [392,330,262].forEach((f,i)=>tone(f,i*.18,.4,'sine',.2)); }
+};
+const play = n => { if (S.sound) SFX[n](); };
+function paintSound(){ const b=$('#soundBtn'); b.innerHTML = S.sound ? IC.on : IC.off; b.setAttribute('aria-pressed', S.sound); }
+
+/* ---------- confetti ---------- */
+function confetti(){
+  if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const cv = $('#fx'), c = cv.getContext('2d'); cv.width = innerWidth; cv.height = innerHeight;
+  const cols = ['#46c2cf','#7e89fc','#f6c657','#52e0a4','#ff7a99','#ffffff'];
+  const ps = Array.from({length:140}, () => ({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.4, vx:(Math.random()-.5)*3, vy:2+Math.random()*4, s:5+Math.random()*7, r:Math.random()*6, vr:(Math.random()-.5)*.3, c:pick(cols) }));
+  let t0 = performance.now();
+  (function f(t){
+    c.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p => { p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; c.save(); c.translate(p.x,p.y); c.rotate(p.r); c.fillStyle=p.c; c.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6); c.restore(); });
+    if (t - t0 < 3200) requestAnimationFrame(f); else c.clearRect(0,0,cv.width,cv.height);
+  })(t0);
+}
+
+/* ---------- hero sphere ---------- */
+(function sphere(){
+  const cv = $('#sphere'), c = cv.getContext('2d'), W = cv.width, R = W*.4;
+  const N = 34, pts = [];
+  for (let i=0;i<N;i++){ const y = 1 - 2*(i+.5)/N, r = Math.sqrt(1-y*y), th = i*2.399963; pts.push([Math.cos(th)*r, y, Math.sin(th)*r]); }
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let a = .6;
+  function draw(){
+    c.clearRect(0,0,W,W);
+    const g = c.createRadialGradient(W*.42,W*.38,R*.1,W/2,W/2,R*1.05);
+    g.addColorStop(0,'#b7bdff'); g.addColorStop(.6,'#7e89fc'); g.addColorStop(1,'#4a43b8');
+    c.fillStyle = g; c.beginPath(); c.arc(W/2,W/2,R,0,7); c.fill();
+    const ca = Math.cos(a), sa = Math.sin(a);
+    const P = pts.map(p => { const x = p[0]*ca + p[2]*sa, z = -p[0]*sa + p[2]*ca; return {x:W/2+x*R*1.04, y:W/2+p[1]*R*1.04, z}; });
+    c.lineWidth = 3; c.strokeStyle = '#46c2cf';
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+      const dx=pts[i][0]-pts[j][0], dy=pts[i][1]-pts[j][1], dz=pts[i][2]-pts[j][2];
+      if (dx*dx+dy*dy+dz*dz < .62 && (P[i].z+P[j].z) > -.3){ c.globalAlpha = .45 + .45*((P[i].z+P[j].z)/2+1)/2; c.beginPath(); c.moveTo(P[i].x,P[i].y); c.lineTo(P[j].x,P[j].y); c.stroke(); }
+    }
+    c.globalAlpha = 1;
+    P.forEach(p => { if (p.z > -.35){ c.fillStyle = '#fff'; c.beginPath(); c.arc(p.x,p.y,6+p.z*3,0,7); c.fill(); } });
+  }
+  (function loop(){ if ($('.hero-art').classList.contains('three')) return; draw(); if(!reduce){ a += .004; requestAnimationFrame(loop); } })();
+})();
+
+/* ---------- 3D hero (three.js) ---------- */
+(function hero3D(){
+  if (!window.THREE) return;
+  const T = THREE, host = $('.hero-art');
+  try {
+    const r = new T.WebGLRenderer({ antialias:true, alpha:true });
+    r.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    r.domElement.className = 'gl'; r.domElement.setAttribute('aria-hidden','true');
+    const cam = new T.PerspectiveCamera(38, 1, .1,50); cam.position.set(0, 0, 8);
+    const sc = new T.Scene();
+    sc.add(new T.AmbientLight(0x9a96ff, .75));
+    const dl = new T.DirectionalLight(0xffffff, 1.15); dl.position.set(3, 4, 6); sc.add(dl);
+    const pl = new T.PointLight(0x46c2cf, 1.8, 24); pl.position.set(-5, -2, 5); sc.add(pl);
+
+    const globe = new T.Group(); sc.add(globe);
+    const geo = new T.IcosahedronGeometry(2, 1);
+    globe.add(new T.Mesh(geo, new T.MeshStandardMaterial({ color:0x7e89fc, flatShading:true, roughness:.35, metalness:.2 })));
+    globe.add(new T.LineSegments(new T.EdgesGeometry(geo), new T.LineBasicMaterial({ color:0x46c2cf })));
+    const pos = geo.attributes.position, seen = new Set();
+    const ng = new T.SphereGeometry(.075, 12, 12), nm = new T.MeshBasicMaterial({ color:0xffffff });
+    for (let i = 0; i < pos.count; i++){
+      const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i), k = [x,y,z].map(v => v.toFixed(2)).join();
+      if (seen.has(k)) continue; seen.add(k);
+      const m = new T.Mesh(ng, nm); m.position.set(x, y, z); globe.add(m);
+    }
+
+    const lock = new T.Group();
+    const bodyM = new T.MeshStandardMaterial({ color:0x8fc3e3, metalness:.35, roughness:.3 });
+    const body = new T.Mesh(new T.BoxGeometry(1.25, .95, .55), bodyM); lock.add(body);
+    const sh = new T.Mesh(new T.TorusGeometry(.36, .09, 14, 32, Math.PI), new T.MeshStandardMaterial({ color:0xd5dbea, metalness:.85, roughness:.22 }));
+    sh.position.y = .46; lock.add(sh);
+    const dark = new T.MeshStandardMaterial({ color:0x14306a });
+    const kh = new T.Mesh(new T.CylinderGeometry(.11, .11, .04, 20), dark); kh.rotation.x = Math.PI/2; kh.position.set(0, .1, .29); lock.add(kh);
+    const ks = new T.Mesh(new T.BoxGeometry(.08, .3, .04), dark); ks.position.set(0, -.14, .29); lock.add(ks);
+    lock.position.set(-1.6, -1.75, 1.5); lock.scale.setScalar(1.15); sc.add(lock);
+
+    host.appendChild(r.domElement); host.classList.add('three');
+    function size(){ const w = host.clientWidth || 300; r.setSize(w, w, false); }
+    size(); addEventListener('resize', size);
+
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+    addEventListener('pointermove', e => { tx = (e.clientX / innerWidth - .5); ty = (e.clientY / innerHeight - .5); });
+    const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    let t0 = performance.now();
+    (function frame(now){
+      if ($('#welcome').style.display !== 'none'){
+        const t = (now - t0) / 1000;
+        cx += (tx - cx) * .06; cy += (ty - cy) * .06;
+        globe.rotation.y = reduce ? .5 : t * .35 + cx * 1.2;
+        globe.rotation.x = cy * .8 + .15;
+        lock.rotation.y = Math.sin(t * .9) * .5 + cx * .6;
+        lock.rotation.x = cy * .4;
+        lock.position.y = -1.75 + Math.sin(t * 1.4) * .12;
+        r.render(sc, cam);
+      }
+      if (!reduce) requestAnimationFrame(frame);
+    })(performance.now());
+    if (reduce) addEventListener('resize', () => r.render(sc, cam));
+  } catch(e){ host.classList.remove('three'); }
+})();
+
+/* ---------- 3D tilt on level cards ---------- */
+document.addEventListener('pointermove', e => {
+  const c = e.target.closest && e.target.closest('.lvl:not(.locked)');
+  $$('.lvl.tilted').forEach(x => { if (x !== c){ x.classList.remove('tilted'); x.style.transform = ''; } });
+  if (!c || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const b = c.getBoundingClientRect(), px = (e.clientX - b.left) / b.width - .5, py = (e.clientY - b.top) / b.height - .5;
+  c.classList.add('tilted'); c.style.transform = `rotateY(${(px * 22).toFixed(1)}deg) rotateX(${(-py * 22).toFixed(1)}deg) translateZ(14px)`;
+});
+document.addEventListener('pointerleave', () => $$('.lvl.tilted').forEach(x => { x.classList.remove('tilted'); x.style.transform = ''; }));
+
+/* ---------- navigation ---------- */
+function showTab(name){
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', t.id === 't-'+name));
+  $$('.panel').forEach(p => p.hidden = p.id !== 'p-'+name);
+  if (name === 'game') renderMap();
+  if (name === 'me') renderMe();
+  if (name === 'board') renderBoard();
+  scrollTo({top:0});
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => { play('click'); showTab(t.id.slice(2)); }));
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { play('click'); showTab(g.dataset.go); } });
+$('#soundBtn').addEventListener('click', () => { S.sound = !S.sound; save(); paintSound(); if (S.sound) { ctx(); play('click'); } });
+
+function paintHud(){
+  $('#hello').textContent = 'أهلاً يا ' + S.name;
+  $('#pts').textContent = total(); $('#keys').textContent = keyCount();
+  $('#sub').textContent = (S.team ? 'فريق ' + S.team + ' · ' : '') + 'أكاديمية الحراس الرقميين';
+  document.title = 'حُماة العالم الرقمي';
+}
+function enter(){
+  $('#welcome').style.display = 'none'; $('#app').style.display = 'block';
+  paintSound(); paintHud();
+  const br = $('#brief'), tb = $('.tabs');
+  $('#startMission').onclick = () => { play('click'); S.briefed = true; save(); br.hidden = true; tb.style.display = ''; showTab('learn'); };
+  if (!S.briefed){ br.hidden = false; tb.style.display = 'none'; $$('.panel').forEach(p => p.hidden = true); scrollTo({top:0}); }
+  else { br.hidden = true; tb.style.display = ''; showTab('learn'); }
+}
+$('#nameForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = $('#nameIn').value.trim();
+  if (v.length < 2){ $('#nameErr').textContent = 'اكتب اسمك من حرفين على الأقل.'; return; }
+  S.name = v; S.team = $('#teamIn').value.trim(); save(); updateBoard(); ctx(); play('win'); enter();
+});
+$('#resetBtn').addEventListener('click', () => {
+  updateBoard(); store.del('hamat-v2'); S = { name:'', team:'', scores:{1:null,2:null,3:null}, done:{}, badges:{}, sound:S.sound };
+  $('#app').style.display = 'none'; $('#welcome').style.display = ''; $('#nameIn').value = ''; $('#teamIn').value = '';
+});
+
+/* ---------- level map ---------- */
+const passed = id => !!S.done[id];
+const unlocked = id => id === 1 || passed(id-1);
+const keyCount = () => [1,2,3].filter(passed).length;
+
+function renderMap(){
+  $('#play').style.display = 'none'; $('#play').innerHTML = ''; $('#map').style.display = '';
+  $('#levels').innerHTML = LEVELS.map(L => {
+    const open = unlocked(L.id), done = passed(L.id), sc = S.scores[L.id];
+    const state = !open ? `<span class="state" style="color:var(--muted)">${IC.lock} مغلق</span>`
+      : done ? `<span class="state" style="color:var(--good)">مفتاح الأمان مُكتسب · ${sc}/${L.max}</span>`
+      : sc != null ? `<span class="state" style="color:var(--gold)">آخر نتيجة ${sc}/${L.max} · حاول مرة أخرى</span>`
+      : `<span class="state" style="color:var(--cyan)">جاهز</span>`;
+    return `<div class="card lvl ${open?'':'locked'} ${done?'done':''}">
+      ${medalSVG(L.medal)}
+      <h3>المستوى ${L.id}: ${L.name}</h3>
+      <p>${L.sub} · ${L.max} نقطة</p><p style="font-size:.85rem">للنجاح: ${L.need}</p>
+      ${state}
+      <button class="btn ${done?'alt':''}" data-lv="${L.id}" ${open?'':'disabled'}>${done?'العب مرة أخرى':'ابدأ'}</button>
+    </div>`;
+  }).join('');
+}
+$('#levels').addEventListener('click', e => { const b = e.target.closest('[data-lv]'); if (b && !b.disabled){ play('click'); startLevel(+b.dataset.lv); } });
+
+/* ---------- play ---------- */
+let P = null;
+function startLevel(id){
+  const L = LEVELS[id-1];
+  P = { L, i:0, score:0, marks:[], locked:false, chPass:true };
+  if (L.type === 'mc') P.items = shuffle(L.items).slice(0,6).map(it => { const idx = shuffle(it.o.map((t,k)=>k)); return { q:it.q, why:it.why, o:idx.map(k=>it.o[k]), a:idx.indexOf(it.a) }; });
+  else if (L.type === 'tf') P.items = shuffle(L.items).slice(0,5).concat([{ sp:'sort' }]);
+  else P.items = [{ sp:'virus' }, { sp:'pwd' }];
+  $('#map').style.display = 'none'; $('#play').style.display = 'block';
+  renderStep(); scrollTo({top:0});
+}
+function head(){
+  const n = P.items.length;
+  const dots = P.items.map((_,k) => `<i class="${P.marks[k]===1?'ok':P.marks[k]===0?'no':k===P.i?'cur':''}"></i>`).join('');
+  return `<div class="play-head"><div><h2>المستوى ${P.L.id}: ${P.L.name}</h2><p style="color:var(--muted)">${P.L.sub} · الخطوة ${Math.min(P.i+1,n)} من ${n}</p></div>
+    <div style="display:flex;gap:12px;align-items:center"><div class="dots" aria-hidden="true">${dots}</div><div class="chip">${P.score} / ${P.L.max}</div></div></div>`;
+}
+const fbBox = `<div class="fb" id="fb" role="status" aria-live="polite"></div><div class="next" id="nextW"><button class="btn" id="nextB"></button></div>`;
+
+function renderStep(){
+  const L = P.L;
+  if (P.i >= P.items.length) return finishLevel();
+  P.locked = false;
+  const it = P.items[P.i], host = $('#play');
+  if (it.sp === 'sort') return taskSort();
+  if (it.sp === 'virus') return taskVirus();
+  if (it.sp === 'pwd') return taskPwd();
+  if (L.type === 'tf'){
+    host.innerHTML = head() + `<div class="card"><div class="q-meta">ضع علامة ✓ أمام العبارة الصحيحة و ✗ أمام الخاطئة · 10 نقاط</div><p class="q">${esc(it.q)}</p>
+      <div class="tf"><button data-v="1" class="yes">${IC.yes}<span>صح</span></button><button data-v="0" class="no">${IC.no}<span>خطأ</span></button></div>${fbBox}</div>`;
+    $$('.tf button').forEach(b => b.addEventListener('click', () => answer(b.dataset.v === '1' ? it.a === true : it.a === false, b, it.why, L.per)));
+  } else {
+    const ar = ['أ','ب','ج','د'];
+    host.innerHTML = head() + `<div class="card"><div class="q-meta">تحدي جدار الحماية · اختر الإجابة الصحيحة · 10 نقاط</div><p class="q">${esc(it.q)}</p>
+      <div class="opts">${it.o.map((t,k)=>`<button class="opt" data-k="${k}"><b>${ar[k]}</b><span>${esc(t)}</span></button>`).join('')}</div>${fbBox}</div>`;
+    $$('.opt').forEach(b => b.addEventListener('click', () => {
+      if (P.locked) return;
+      const ok = +b.dataset.k === it.a;
+      if (!ok) $$('.opt')[it.a].classList.add('right');
+      answer(ok, b, it.why, L.per);
+    }));
+  }
+}
+
+function bumpChip(){ const c=$('.play-head .chip'); c.textContent = P.score + ' / ' + P.L.max; c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
+function lastLabel(){ return P.i >= P.items.length-1 ? 'عرض النتيجة' : 'التالي'; }
+function showFb(ok, pts, why, extra){
+  const fb = $('#fb');
+  fb.className = 'fb show ' + (ok ? 'ok' : 'no');
+  fb.innerHTML = `${ok?IC.yes:IC.no}<div><h4>${ok ? pick(GOOD) : pick(BAD)}<span class="pts">+${pts} نقطة</span></h4><p>${why}</p>${extra||''}</div>`;
+  fb.firstElementChild.style.cssText = 'width:38px;flex:none;color:' + (ok?'var(--good)':'var(--bad)');
+  const nb = $('#nextB'); nb.textContent = lastLabel(); $('#nextW').classList.add('show');
+  nb.onclick = () => { play('click'); P.i++; renderStep(); scrollTo({top:0}); };
+  fb.scrollIntoView({behavior:'smooth', block:'nearest'}); nb.focus({preventScroll:true});
+}
+function answer(ok, btn, why, per){
+  if (P.locked) return; P.locked = true;
+  $$('.tf button,.opt').forEach(b => b.disabled = true);
+  btn.classList.add(ok ? 'right' : 'wrong');
+  if (ok) P.score += per;
+  P.marks[P.i] = ok ? 1 : 0;
+  play(ok ? 'right' : 'wrong');
+  bumpChip();
+  const d = $$('.dots i'); d[P.i].className = ok ? 'ok' : 'no';
+  showFb(ok, ok ? per : 0, ok ? esc(why) : 'تذكّر: ' + esc(why));
+}
+
+/* ---- badges ---- */
+function grant(k){ const b = BADGES.find(x => x.k === k); S.badges[k] = true; save(); return `<p style="margin-top:8px;color:var(--gold);font-weight:700">حصلت على شارة «${b.n}»!</p>`; }
+
+/* ---- generic two-choice list task (20 points) ---- */
+function listTask(o){
+  const rows = shuffle(o.rows);
+  $('#play').innerHTML = head() + `<div class="card"><div class="q-meta">${o.meta}</div><p class="q">${o.q}</p>
+    <div class="sortlist">${rows.map((r,k)=>`<div class="srow" data-k="${k}">${r.ltr?`<code>${r.t}</code>`:`<span>${r.t}</span>`}<div class="sbtns"><button class="sb" data-v="1">${o.lab[0]}</button><button class="sb" data-v="0">${o.lab[1]}</button></div></div>`).join('')}</div>
+    <button class="btn" id="subL" disabled style="margin-top:14px">تحقق من إجابتي</button>${fbBox}</div>`;
+  const ans = {};
+  $$('.srow').forEach(r => r.addEventListener('click', e => {
+    const b = e.target.closest('.sb'); if (!b || P.locked) return; play('click');
+    ans[r.dataset.k] = b.dataset.v === '1';
+    $$('.sb', r).forEach(x => x.classList.toggle('on', x === b));
+    $('#subL').disabled = Object.keys(ans).length < rows.length;
+  }));
+  $('#subL').addEventListener('click', () => {
+    if (P.locked) return; P.locked = true; $('#subL').disabled = true;
+    let n = 0;
+    $$('.srow').forEach(r => {
+      const q = rows[+r.dataset.k], ok = ans[r.dataset.k] === q.a; if (ok) n++;
+      r.classList.add(ok ? 'right' : 'wrong');
+      $$('.sb', r).forEach(x => { x.disabled = true; if ((x.dataset.v === '1') === q.a) x.classList.add('key'); });
+    });
+    const pts = Math.round(n / rows.length * 20), ok = n >= rows.length - 1;
+    P.score += pts; P.marks[P.i] = ok ? 1 : 0;
+    if (o.sp === 'sort') P.chPass = ok;
+    bumpChip(); play(ok ? 'right' : 'wrong');
+    showFb(ok, pts, n === rows.length ? o.full : o.hint, n === rows.length && o.badge ? grant(o.badge) : '');
+  });
+}
+
+/* ---- level 1 challenge: decode the passwords ---- */
+const SORT = [
+  { t:'Mo5&re2i', strong:true }, { t:'abc123', strong:false }, { t:'Abg65@iu', strong:true },
+  { t:'12345678', strong:false }, { t:'9045#@Ta', strong:true }, { t:'Ahmed2016', strong:false }
+];
+function taskSort(){
+  listTask({ sp:'sort', meta:'تحدي فك الشفرة · حتى 20 نقطة', q:'هل كلمة المرور قوية أم ضعيفة؟ أصب في 5 من 6 لتفك الشفرة.', lab:['قوية','ضعيفة'],
+    rows: SORT.map(x => ({ t:x.t, a:x.strong, ltr:true })),
+    full:'ممتاز! فككت الشفرة وميّزت كل كلمات المرور.',
+    hint:'تذكّر: كلمة المرور القوية فيها 8 أحرف على الأقل وحروف وأرقام ورموز مثل # أو @، والضعيفة قصيرة أو سهلة أو من معلوماتك الشخصية. اضغط «التالي» لرؤية نتيجتك.' });
+}
+
+/* ---- level 3 task 1: virus hunter ---- */
+function taskVirus(){
+  listTask({ sp:'virus', badge:'virus', meta:'مهمة صيد الفيروسات · حتى 20 نقطة', q:'هل هذا التصرف يحميني من الفيروسات والقراصنة أم يعرّضني للخطر؟', lab:['يحميني','خطر'],
+    rows:[
+      { t:'أثبّت برنامج مكافحة الفيروسات على كل أجهزتي', a:true },
+      { t:'أفتح مرفقاً من رسالة أرسلها شخص لا أعرفه', a:false },
+      { t:'أستخدم كلمة مرور قوية مختلفة لكل حساب', a:true },
+      { t:'أستخدم تاريخ ميلادي ككلمة مرور', a:false },
+      { t:'أستعين ببرنامج لإدارة كلمات المرور', a:true },
+      { t:'أستخدم كلمة المرور نفسها في كل حساباتي', a:false }
+    ],
+    full:'رائع! أنت قاهر الفيروسات.',
+    hint:'تذكّر: ثبّت برنامج الحماية، ولا تفتح رسائل ومرفقات من أشخاص لا تعرفهم، ولا تستخدم معلوماتك الشخصية أو كلمة مرور واحدة لكل الحسابات.' });
+}
+
+/* ---- level 3 task 2: design a strong password ---- */
+const WEAK = ['abc123','123456','password','qwerty','111111','12345678','abcdef'];
+function pwChecks(pw){
+  const nm = (S.name||'').toLowerCase().replace(/\s+/g,' ').split(' ').filter(w => w.length >= 3);
+  const low = pw.toLowerCase();
+  return [
+    { t:'طولها 8 أحرف أو أكثر', h:'اجعلها 8 أحرف على الأقل', ok: pw.length >= 8 },
+    { t:'فيها حرف كبير (A-Z)', h:'أضف حرفاً إنجليزياً كبيراً مثل M', ok: /[A-Z]/.test(pw) },
+    { t:'فيها حرف صغير (a-z)', h:'أضف حرفاً إنجليزياً صغيراً مثل o', ok: /[a-z]/.test(pw) },
+    { t:'فيها أرقام', h:'أضف رقماً أو أكثر مثل 5', ok: /\d/.test(pw) },
+    { t:'فيها رمز خاص مثل @ # & !', h:'كلمة المرور القوية تحتاج رمزاً خاصاً مثل # أو @ لتصبح أقوى', ok: /[^A-Za-z0-9؀-ۿ\s]/.test(pw) },
+    { t:'ليس فيها اسمي ولا كلمة سهلة', h:'لا تستخدم اسمك أو معلوماتك الشخصية أو كلمة سهلة مثل abc123', ok: pw.length > 0 && !nm.some(w => low.includes(w)) && !WEAK.some(w => low.includes(w)) }
+  ];
+}
+function taskPwd(){
+  $('#play').innerHTML = head() + `<div class="card"><div class="q-meta">التطبيق العملي · حتى 20 نقطة</div>
+    <p class="q">اقترح كلمة مرور قوية خالية من بياناتك الشخصية، وتأكد أنها تحقق كل الشروط.</p>
+    <label for="pwin" style="font-weight:700">كلمة المرور التدريبية:</label>
+    <input class="pwin" id="pwin" type="text" maxlength="30" autocomplete="off" spellcheck="false" placeholder="Mo5&re2i">
+    <div class="warn">لا تكتب كلمة مرورك الحقيقية هنا. اخترع واحدة جديدة للتدريب فقط. لا يتم حفظها.</div>
+    <div class="meter"><span id="mtr"></span></div>
+    <ul class="checks" id="chk" style="padding:0"></ul>
+    <button class="btn" id="sub2" disabled>أرسل كلمة المرور</button>${fbBox}</div>`;
+  const inp = $('#pwin');
+  const upd = () => {
+    const c = pwChecks(inp.value), n = c.filter(x=>x.ok).length;
+    $('#chk').innerHTML = c.map(x => `<li class="${x.ok?'ok':''}"><i>${x.ok?'✓':'•'}</i>${x.t}</li>`).join('');
+    const m = $('#mtr'); m.style.width = (n/c.length*100) + '%'; m.style.background = n <= 3 ? 'var(--bad)' : n < c.length ? 'var(--gold)' : 'var(--good)';
+    $('#sub2').disabled = inp.value.length === 0;
+  };
+  inp.addEventListener('input', upd); upd(); inp.focus({preventScroll:true});
+  $('#sub2').addEventListener('click', () => {
+    if (P.locked) return; P.locked = true;
+    const c = pwChecks(inp.value), n = c.filter(x=>x.ok).length, pts = Math.round(n / c.length * 20), ok = n >= 5;
+    inp.disabled = true; $('#sub2').disabled = true;
+    P.score += pts; P.marks[P.i] = ok ? 1 : 0;
+    bumpChip(); play(ok ? 'right' : 'wrong');
+    const hints = c.filter(x => !x.ok).map(x => x.h);
+    const why = n === c.length ? 'كلمة مرور قوية! فيها كل الشروط: طول مناسب وأحرف كبيرة وصغيرة وأرقام ورموز، وبلا معلومات شخصية.' : 'تذكّر: ' + hints.join('. ') + '.';
+    const extra = (n === c.length ? grant('pass') : '') + `<div class="reveal"><button class="btn ghost" id="oralB" type="button">سؤال إثرائي: ما أهمية برنامج مكافحة الفيروسات؟</button>
+      <div class="answer" id="oralA">يساعد على الكشف عن الفيروسات والبرامج الضارة، وقد يساعد أيضاً في إصلاح الملفات التي أتلفتها الفيروسات.</div></div>`;
+    showFb(ok, pts, why, extra);
+    $('#oralB').addEventListener('click', () => { play('click'); $('#oralA').classList.toggle('show'); });
+  });
+}
+
+/* ---------- finish ---------- */
+function finishLevel(){
+  const L = P.L, sc = P.score;
+  const ok = L.id === 1 ? (sc >= PASS1 && P.chPass) : L.id === 2 ? sc >= PASS2 : sc >= PASS3;
+  const wall = L.id === 2 && sc === L.max;
+  S.scores[L.id] = Math.max(S.scores[L.id] || 0, sc);
+  if (ok) S.done[L.id] = true;
+  if (wall) S.badges.wall = true;
+  save(); updateBoard(); paintHud();
+  const last = L.id === 3;
+  play(ok ? 'win' : 'fail'); if (ok) confetti();
+  const why = (L.id === 1 && sc >= PASS1 && !P.chPass) ? 'جمعت النقاط، لكن يجب أن تفك الشفرة (5 من 6) لتنجح.' : 'المطلوب: ' + L.need + '.';
+  const msg = ok
+    ? (last ? `مبروك يا ${esc(S.name)}! أنت الآن «الحارس الرقمي المعتمد» ولقبك «${titleOf()}».` : `أحسنت يا ${esc(S.name)}! حصلت على مفتاح الأمان رقم ${L.id} وفُتح المستوى التالي.`)
+    : `لم تنجح بعد، لكنك تتعلم! ${why} راجع الشرح ثم حاول مرة أخرى يا ${esc(S.name)}.`;
+  $('#play').innerHTML = `<div class="card result">${ok ? medalSVG(L.medal) : ''}
+    <h2>${ok ? 'اجتزت المستوى ' + L.id : 'حاول مرة أخرى'}</h2>
+    <div class="big">${sc} / ${L.max}</div><div style="color:var(--muted)">المطلوب: ${L.need}</div>
+    <p>${msg}</p>
+    ${wall ? `<p style="color:var(--gold);font-weight:700">حصلت على شارة «جدار الحماية»!</p>` : ''}
+    <div class="btns">
+      ${ok && !last ? `<button class="btn" id="goNext">المستوى التالي</button>` : ''}
+      ${ok && last ? `<button class="btn" id="goCert">اعرض شهادتي</button><button class="btn alt" id="goBoard">لوحة المتصدرين</button>` : ''}
+      ${!ok ? `<button class="btn alt" id="goLearn">راجع الشرح</button>` : ''}
+      <button class="btn ghost" id="again">${ok ? 'العب مرة أخرى' : 'حاول مرة أخرى'}</button>
+      <button class="btn ghost" id="goMap">خريطة المستويات</button>
+    </div></div>`;
+  scrollTo({top:0});
+  const on = (id, f) => { const e = $(id); if (e) e.onclick = () => { play('click'); f(); }; };
+  on('#goNext', () => startLevel(L.id+1)); on('#goCert', () => showTab('me')); on('#goBoard', () => showTab('board'));
+  on('#goLearn', () => showTab('learn')); on('#again', () => startLevel(L.id)); on('#goMap', renderMap);
+}
+
+/* ---------- certificate (canvas -> PDF) ---------- */
+function shieldPath(ctx, x, y, k, d){ ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.fillStyle = d.fill; ctx.fill(new Path2D(d.path)); ctx.restore(); }
+async function drawCert(){
+  try { await Promise.all([document.fonts.load('800 80px "Baloo Bhaijaan 2"'), document.fonts.load('700 40px Cairo'), document.fonts.load('400 40px Cairo')]); } catch(e){}
+  const W = 1684, H = 1190, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const c = cv.getContext('2d'); c.direction = 'rtl'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+  const body = '"Cairo", "Segoe UI", Tahoma, sans-serif', disp = '"Baloo Bhaijaan 2", "Cairo", Tahoma, sans-serif';
+  let g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#181143'); g.addColorStop(1, '#2d2388');
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  const rg = c.createRadialGradient(W, 0, 0, W, 0, 700); rg.addColorStop(0, 'rgba(70,194,207,.35)'); rg.addColorStop(1, 'transparent'); c.fillStyle = rg; c.fillRect(0, 0, W, H);
+  const rg2 = c.createRadialGradient(0, H, 0, 0, H, 700); rg2.addColorStop(0, 'rgba(126,137,252,.35)'); rg2.addColorStop(1, 'transparent'); c.fillStyle = rg2; c.fillRect(0, 0, W, H);
+  c.strokeStyle = '#f6c657'; c.lineWidth = 10; c.strokeRect(40, 40, W - 80, H - 80);
+  c.strokeStyle = 'rgba(246,198,87,.5)'; c.lineWidth = 3; c.strokeRect(68, 68, W - 136, H - 136);
+  // gold shield
+  const sg = c.createLinearGradient(0, 0, 100, 120); sg.addColorStop(0, '#ffe28f'); sg.addColorStop(1, '#d19a22');
+  const k = 2.1, sx = W/2 - 50*k, sy = 96;
+  shieldPath(c, sx, sy, k, { path:SHIELD, fill:sg });
+  const ig = c.createLinearGradient(0, 0, 0, 120); ig.addColorStop(0, '#3a31a8'); ig.addColorStop(1, '#14103f');
+  shieldPath(c, sx, sy, k, { path:SHIELD_IN, fill:ig });
+  c.save(); c.translate(sx + 50*k, sy + 58*k); c.scale(k, k);
+  c.strokeStyle = sg; c.lineWidth = 4.5; c.lineCap = 'round'; c.beginPath(); c.moveTo(-9, -4); c.lineTo(-9, -10); c.arc(0, -10, 9, Math.PI, 0); c.lineTo(9, -4); c.stroke();
+  c.fillStyle = sg; c.beginPath(); c.roundRect ? c.roundRect(-15, -4, 30, 24, 6) : c.rect(-15, -4, 30, 24); c.fill();
+  c.fillStyle = '#14103f'; c.beginPath(); c.arc(0, 6.5, 3.4, 0, 7); c.fill(); c.fillRect(-1.4, 8, 2.8, 7); c.restore();
+  const T = (txt, y, size, color, font, wt) => { c.fillStyle = color; c.font = `${wt || 700} ${size}px ${font || body}`; c.fillText(txt, W/2, y); };
+  T('شهادة تقدير', 420, 64, '#46c2cf');
+  T('الحارس الرقمي المعتمد', 560, 120, '#f6c657', disp, 800);
+  T('تُمنح هذه الشهادة إلى البطل', 650, 44, '#b9b6e6', body, 400);
+  T(S.name, 790, 130, '#ffffff', disp, 800);
+  c.strokeStyle = 'rgba(246,198,87,.6)'; c.lineWidth = 3; c.beginPath(); c.moveTo(W/2 - 380, 820); c.lineTo(W/2 + 380, 820); c.stroke();
+  T(`لاجتيازه المستويات الثلاثة بمجموع ${total()} من ${MAXPTS} نقطة في درس الأمان الرقمي`, 905, 44, '#f4f3ff', body, 600);
+  T(`اللقب: «${titleOf()}»`, 965, 50, '#46c2cf', disp, 800);
+  T('تكنولوجيا المعلومات والاتصالات · الصف الرابع الابتدائي', 1022, 36, '#b9b6e6', body, 400);
+  T(new Date().toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric' }), 1072, 34, '#f6c657', body, 600);
+  T('إعداد: مراد عباس مراد · تحت إشراف: د/ زينب أحمد · م.م/ مها محمود', 1118, 30, '#b9b6e6', body, 400);
+  return cv;
+}
+function pdfFromJpeg(jpg, w, h){
+  const enc = new TextEncoder(), parts = [], offs = []; let len = 0;
+  const push = u => { parts.push(u); len += u.length; };
+  const str = x => push(enc.encode(x));
+  str('%PDF-1.4\n%\xe2\xe3\xcf\xd3\n');
+  const obj = (n, body) => { offs[n] = len; str(`${n} 0 obj\n${body}\nendobj\n`); };
+  obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+  obj(3, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>');
+  const cs = 'q 842 0 0 595 0 0 cm /Im0 Do Q';
+  obj(4, `<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`);
+  offs[5] = len; str(`5 0 obj\n<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);
+  push(jpg); str('\nendstream\nendobj\n');
+  const xr = len; let x = 'xref\n0 6\n0000000000 65535 f \n';
+  for (let i = 1; i <= 5; i++) x += String(offs[i]).padStart(10, '0') + ' 00000 n \n';
+  str(x + `trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`);
+  const out = new Uint8Array(len); let o = 0; parts.forEach(u => { out.set(u, o); o += u.length; });
+  return out;
+}
+async function buildCertPdf(){
+  const cv = await drawCert();
+  const b64 = cv.toDataURL('image/jpeg', .92).split(',')[1], bin = atob(b64), jpg = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) jpg[i] = bin.charCodeAt(i);
+  return { pdf: pdfFromJpeg(jpg, cv.width, cv.height), url: cv.toDataURL('image/jpeg', .9) };
+}
+async function downloadCert(btn){
+  const msg = $('#dlMsg'); btn.disabled = true; msg.textContent = 'جارٍ تجهيز الشهادة...';
+  try {
+    const built = await buildCertPdf();
+    const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+    if (!dl){
+      msg.textContent = 'التحميل المباشر غير متاح هنا. اضغط مطولاً على صورة الشهادة (أو زر الفأرة الأيمن) لحفظها.';
+      $('#certImg').innerHTML = `<img class="certimg" alt="شهادة حامي العالم الرقمي" src="${built.url}">`;
+    } else {
+      await dl.save({ filename: 'شهادة-الحارس-الرقمي.pdf', data: new Blob([built.pdf], { type:'application/pdf' }) });
+      msg.textContent = 'تم تجهيز الملف. تحقق من مجلد التنزيلات.'; play('win');
+    }
+  } catch(e){
+    msg.textContent = (e && e.code === 'declined') ? 'لم يتم الحفظ. اضغط الزر مرة أخرى متى أردت.' : 'تعذر التحميل الآن. حاول مرة أخرى.';
+  }
+  btn.disabled = false;
+}
+document.addEventListener('click', e => { const b = e.target.closest('#dlBtn'); if (b){ play('click'); downloadCert(b); } });
+
+/* ---------- achievements ---------- */
+const BADGES = [
+  { k:'wall',  n:'جدار الحماية',    d:'علامة كاملة في تحدي جدار الحماية' },
+  { k:'virus', n:'قاهر الفيروسات',  d:'علامة كاملة في مهمة صيد الفيروسات' },
+  { k:'pass',  n:'خبير كلمة المرور', d:'كلمة مرور تحقق كل الشروط' }
+];
+const titleOf = () => ['متدرب الأمان الرقمي','حارس صاعد','خبير الأمان الرقمي','مهندس الأمان الرقمي'][BADGES.filter(b => S.badges[b.k]).length];
+function renderMe(){
+  const t = total();
+  $('#bar').style.width = (t / MAXPTS * 100) + '%';
+  $('#progTxt').textContent = `${t} نقطة من ${MAXPTS} · ${keyCount()} من 3 مفاتيح أمان`;
+  $('#badges').innerHTML = LEVELS.map(L => `<div class="bd ${passed(L.id)?'':'lock'}">${medalSVG(L.medal)}<b>${L.name}</b><p>${passed(L.id) ? `مفتاح ${L.id} · ${S.scores[L.id]}/${L.max}` : 'لم يُكتسب بعد'}</p></div>`).join('');
+  $('#badges2').innerHTML = BADGES.map(b => `<div class="bd ${S.badges[b.k]?'':'lock'}">${badgeSVG(b.k)}<b>${b.n}</b><p>${S.badges[b.k] ? 'مُكتسبة' : b.d}</p></div>`).join('');
+  $('#titleTxt').textContent = titleOf();
+  const d = new Date().toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric' });
+  $('#certBox').innerHTML = passed(3)
+    ? `<div class="cert">${medalSVG('gold')}<small>شهادة تقدير</small><h2>الحارس الرقمي المعتمد</h2><small>تُمنح هذه الشهادة إلى البطل</small><div class="nm">${esc(S.name)}</div>
+       <p>لاجتيازه المستويات الثلاثة بمجموع <b>${t}</b> من ${MAXPTS} نقطة · اللقب: <b>${titleOf()}</b></p><small>${d}</small></div>
+       <div class="dl"><button class="btn" id="dlBtn">تحميل الشهادة PDF</button><div class="dlmsg" id="dlMsg" role="status"></div><div id="certImg"></div></div>`
+    : `<div class="card locked-note">أنجز المستويات الثلاثة لتحصل على شهادة «الحارس الرقمي المعتمد».</div>`;
+}
+
+/* ---------- leaderboard (saved on this device) ---------- */
+const board = { get(){ return store.get('hamat-board-v2') || {}; }, set(b){ store.set('hamat-board-v2', b); } };
+const pid = () => (S.team + '|' + S.name).toLowerCase();
+function updateBoard(){
+  if (!S.name) return;
+  const b = board.get();
+  b[pid()] = { name:S.name, team:S.team || '', pts:total(), badges:BADGES.filter(x => S.badges[x.k]).length, t:Date.now() };
+  board.set(b);
+}
+function renderBoard(){
+  updateBoard();
+  const all = Object.entries(board.get()).map(([id,p]) => Object.assign({id}, p)).sort((a,b) => b.pts - a.pts || b.badges - a.badges || a.t - b.t);
+  const teams = {};
+  all.filter(p => p.team).forEach(p => { const x = teams[p.team] = teams[p.team] || { n:p.team, pts:0, m:0 }; x.pts += p.pts; x.m++; });
+  const tl = Object.values(teams).sort((a,b) => b.pts - a.pts);
+  $('#lbTeams').innerHTML = tl.length ? tl.map((x,i) => `<li class="${x.n===S.team?'me':''}"><span class="rk">${i+1}</span><span class="nm">${esc(x.n)}<small>${x.m} من الأعضاء</small></span><span class="sc">${x.pts} نقطة</span></li>`).join('')
+    : '<li><span class="nm">اكتب اسم فريق عند البدء لتظهر الفرق هنا.</span></li>';
+  $('#lbPlayers').innerHTML = all.slice(0,10).map((p,i) => `<li class="${p.id===pid()?'me':''}"><span class="rk">${i+1}</span><span class="nm">${esc(p.name)}<small>${p.team ? 'فريق ' + esc(p.team) + ' · ' : ''}${p.badges} من 3 شارات</small></span><span class="sc">${p.pts} نقطة</span></li>`).join('');
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('#clearBoard'); if (!b) return;
+  if (b.dataset.armed){ board.set({}); b.dataset.armed = ''; b.textContent = 'مسح لوحة المتصدرين'; updateBoard(); renderBoard(); }
+  else { b.dataset.armed = '1'; b.textContent = 'اضغط مرة أخرى لتأكيد المسح'; }
+});
+
+/* ---------- boot ---------- */
+if (S.name) enter();
+</script>
+
+</body></html>
